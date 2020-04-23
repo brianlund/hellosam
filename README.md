@@ -1,1 +1,3 @@
 # hellosam
+
+Basic SAM pipeline
