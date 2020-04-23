@@ -4,7 +4,7 @@ const http = require('https')
 const assert = require('assert')
 
 const AWS = require('aws-sdk')
-AWS.config.update( {region: process.env.AWS_DEFAULT_REGION} )
+AWS.config.update({ region: process.env.AWS_DEFAULT_REGION })
 const cloudformation = new AWS.CloudFormation()
 
 const params = {
