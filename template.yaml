@@ -8,7 +8,7 @@ Resources:
     Properties:
       Handler: index.handler
       CodeUri: .
-      Runtime: nodejs6.10
+      Runtime: nodejs12.x
       Timeout: 3
       Role: !GetAtt HelloWorldLambdaRole.Arn
       Events:
