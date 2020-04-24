@@ -58,7 +58,7 @@ packageApp:
 
 createTestStack:
     stage: qaCreate
-    image: tarekbecker/awscli
+    image: amazon/aws-cli
     dependencies:
         - packageApp
     script:
