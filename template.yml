@@ -28,7 +28,16 @@ Resources:
             RestApiId: !Ref RestAPI
             Path: /
             Method: GET
-  RestAPI:
+      # for gradual deployment, we need an alias. We just call it live
+      AutoPublishAlias: live
+      DeploymentPreference:
+        # Shift 10 percent of the traffic every minute
+        Type: Linear10PercentEvery1Minute
+        Alarms:
+            # larm that aborts the deployment
+            # alarm is created below!
+            - !Ref HelloWorldLambdaAlarm
+    RestAPI:
     Type: 'AWS::Serverless::Api'
     Properties:
       StageName: prod
@@ -44,8 +53,9 @@ Resources:
             get:
               responses: {}
               x-amazon-apigateway-integration:
+                # Append alias live to the ARN of the lambda
                 uri: !Sub >-
-                  arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${HelloWorldLambda.Arn}/invocations
+                  arn:aws:apigateway:${AWS::Region}:lambda:path/2015-03-31/functions/${HelloWorldLambda.Arn}:live/invocations
                 passthroughBehavior: when_no_match
                 httpMethod: POST
                 type: aws_proxy
