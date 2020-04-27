@@ -52,8 +52,7 @@ packageApp:
     script:
         # package uploads the source code to S3 and creates a new
         # template file with a reference to the code in S3
-        # - cloudformation package --template template.yml --s3-bucket $S3_BUCKET --output-template template-export.yml
-        - aws cloudformation help
+        - aws cloudformation package --template template.yml --s3-bucket $S3_BUCKET --output-template template-export.yml
     artifacts:
         paths:
             # the modified template is the result of this stage
@@ -61,13 +60,15 @@ packageApp:
 
 createTestStack:
     stage: qaCreate
-    image: amazon/aws-cli
+    image:
+      name: amazon/aws-cli
+      entrypoint: ["/bin/sh", "-c"]
     dependencies:
         - packageApp
     script:
         # same command as deployProd, but the stack name includes the
         # pipeline id. This allows testing multiple pipelines concurrently.
-        - cloudformation deploy --template-file template-export.yml --stack-name demo-pipeline-test-$CI_PIPELINE_ID --capabilities CAPABILITY_IAM
+        - aws cloudformation deploy --template-file template-export.yml --stack-name demo-pipeline-test-$CI_PIPELINE_ID --capabilities CAPABILITY_IAM
 
 testOnTestStack:
     stage: qaTest
@@ -79,23 +80,27 @@ testOnTestStack:
 
 removeTestStack:
     stage: qaRemove
-    image: amazon/aws-cli
+    image:
+      name: amazon/aws-cli
+      entrypoint: ["/bin/sh", "-c"]
     script:
-        - cloudformation delete-stack --stack-name demo-pipeline-test-$CI_PIPELINE_ID
-        - cloudformation wait stack-delete-complete --stack-name demo-pipeline-test-$CI_PIPELINE_ID || (echo 'Stack deletion failed.' && exit 1)
+        - aws cloudformation delete-stack --stack-name demo-pipeline-test-$CI_PIPELINE_ID
+        - aws cloudformation wait stack-delete-complete --stack-name demo-pipeline-test-$CI_PIPELINE_ID || (echo 'Stack deletion failed.' && exit 1)
     # execute this job even if one of the previous ones failed
     # to ensure not having orphan stacks
     when: always
 
 deployProd:
     stage: deploy
-    image: amazon/aws-cli
+    image:
+      name: amazon/aws-cli
+      entrypoint: ["/bin/sh", "-c"]
     dependencies:
         - packageApp
     script:
         # use the template-export file to deploy the stack
         # the cloud formation stack name is prod for our stack
-        - cloudformation deploy --template-file template-export.yml --stack-name demo-pipeline-prod-stack --capabilities CAPABILITY_IAM
+        - aws cloudformation deploy --template-file template-export.yml --stack-name demo-pipeline-prod-stack --capabilities CAPABILITY_IAM
     only:
         - master
 
