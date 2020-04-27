@@ -37,7 +37,7 @@ Resources:
             # larm that aborts the deployment
             # alarm is created below!
             - !Ref HelloWorldLambdaAlarm
-    RestAPI:
+  RestAPI:
     Type: 'AWS::Serverless::Api'
     Properties:
       StageName: prod
@@ -92,3 +92,4 @@ Resources:
       Threshold: 0
       # if there was no invocation, the alarm state is OK
       TreatMissingData: notBreaching
+      
