@@ -50,9 +50,7 @@ packageApp:
     script:
         # package uploads the source code to S3 and creates a new
         # template file with a reference to the code in S3
-	    - aws cloudformation package help
-	    - echo "aws cloudformation package --template template.yml --s3-bucket $S3_BUCKET --output-template template-export.yml"
-        - aws cloudformation package --template template.yml --s3-bucket $S3_BUCKET --output-template template-export.yml
+        - echo "aws cloudformation package --template template.yml --s3-bucket $S3_BUCKET --output-template template-export.yml"
     artifacts:
         paths:
             # the modified template is the result of this stage
