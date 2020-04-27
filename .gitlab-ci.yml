@@ -44,7 +44,7 @@ unittesting:
 packageApp:
     stage: package
     image: amazon/aws-cli
-    entrypoint: [""]
+        entrypoint: [""]
     # use the artifcats of the 'npmInstall' job
     dependencies:
         - npmInstall
