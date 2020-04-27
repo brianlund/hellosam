@@ -45,7 +45,7 @@ packageApp:
     stage: package
     image:
       name: amazon/aws-cli
-      entrypoint: ["/bin/sh"]
+      entrypoint: [""]
     # use the artifcats of the 'npmInstall' job
     dependencies:
         - npmInstall
