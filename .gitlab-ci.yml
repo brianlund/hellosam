@@ -45,7 +45,7 @@ packageApp:
     stage: package
     image:
       name: amazon/aws-cli
-      #entrypoint: ["/bin/bash"]
+      entrypoint: ["/bin/sh"]
     # use the artifcats of the 'npmInstall' job
     dependencies:
         - npmInstall
@@ -53,7 +53,7 @@ packageApp:
         # package uploads the source code to S3 and creates a new
         # template file with a reference to the code in S3
         # - cloudformation package --template template.yml --s3-bucket $S3_BUCKET --output-template template-export.yml
-        - cloudformation help
+        - aws cloudformation help
     artifacts:
         paths:
             # the modified template is the result of this stage
