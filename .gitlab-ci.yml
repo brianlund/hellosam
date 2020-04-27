@@ -68,6 +68,7 @@ createTestStack:
     script:
         # same command as deployProd, but the stack name includes the
         # pipeline id. This allows testing multiple pipelines concurrently.
+        - cat ./template-export.yml
         - aws cloudformation deploy --template-file template-export.yml --stack-name demo-pipeline-test-$CI_PIPELINE_ID --capabilities CAPABILITY_IAM
 
 testOnTestStack:
